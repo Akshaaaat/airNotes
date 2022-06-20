@@ -1,0 +1,14 @@
+.hoverByCSS:hover{
+    font-weight: 500;
+    font-size: 0.97rem;
+    color:blueviolet;
+}
+
+.airNotes-logo{
+    color: whitesmoke;
+    text-decoration: none;
+}
+.airNotes-logo:hover{
+    color: aliceblue;
+    text-decoration: none;
+}
