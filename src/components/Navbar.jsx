@@ -1,11 +1,19 @@
-import React, { useContext } from 'react';
-import {Link} from 'react-router-dom';
+import React, { useContext} from 'react';
+import {NavLink} from 'react-router-dom';
 import './CSS/Navbar.css';
-import NoteContext from '../context/NoteContext'
+import { ModeContext } from '../context/NoteMode'
 
 export default function Navbar() {
 
-  const mode = useContext(NoteContext);
+  const mode = useContext(ModeContext);
+
+  //When the navigation Link is active, this style will take place
+  let activeStyle = {
+    fontWeight: "500",
+    fontSize:"0.99rem",
+  }
+
+
 
   return (
     <>
@@ -13,7 +21,7 @@ export default function Navbar() {
     
       <div className="container-fluid">
         <div style={{fontSize: '22px', fontWeight:'500', padding:'4px', color: 'whitesmoke'}} >
-            <Link className="airNotes-logo" aria-current="page" to="/">airNotes</Link>
+            <NavLink className="airNotes-logo" aria-current="page" to="/">airNotes</NavLink>
         </div>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
@@ -21,8 +29,14 @@ export default function Navbar() {
 
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            <li className="nav-item mx-3 my-1">
-              <Link className="nav-link active hoverByCSS" aria-current="page" to="/about">About</Link>
+          <li className="nav-item mx-2  my-1">
+              <NavLink className="nav-link active hoverByCSS" style={({isActive})=>isActive? activeStyle:undefined} aria-current="page" to="/">Home</NavLink>
+          </li>
+            <li className="nav-item mx-2 my-1">
+              <NavLink className="nav-link active hoverByCSS" style={({isActive})=>isActive? activeStyle:undefined} aria-current="page" to="/about">About</NavLink>
+            </li>
+            <li className="nav-item mx-2 my-1">
+              <NavLink className="nav-link active hoverByCSS" style={({isActive})=>isActive? activeStyle:undefined} aria-current="page" to="/contact">Contact Us</NavLink>
             </li>
           </ul>
 

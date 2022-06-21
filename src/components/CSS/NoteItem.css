@@ -1,0 +1,15 @@
+.card{
+    width: 15rem;
+    min-height: 15rem;
+    margin: 19px;
+}
+
+.card-dark{
+    background-color: #001429;
+    color: whitesmoke;
+}
+
+.card-light{
+    background-color: white;
+    color: black;
+}

@@ -1,8 +1,6 @@
-import React, {useState} from 'react';
-import NoteContext from './NoteContext';
+import React, {useState, createContext} from 'react';
 
-const NoteMode =  (props) =>{
-
+export default function NoteMode(props){
 
     //ToggleMode function here
     const [state,setState] = useState({mode:"light"});
@@ -20,10 +18,11 @@ const NoteMode =  (props) =>{
     };
 
     return(
-        <NoteContext.Provider value={{state, toggleMode}}>
+        <ModeContext.Provider value={{state, toggleMode}}>
             {props.children}
-        </NoteContext.Provider>
+        </ModeContext.Provider>
     )
 }
 
-export default NoteMode;
+const ModeContext = createContext();
+export { ModeContext };
