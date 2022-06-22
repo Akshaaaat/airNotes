@@ -1,10 +1,22 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import NoteContext from "../context/NoteContext";
 import NoteItem from './NoteItem';
 
 function Home() {
+
   const context = useContext(NoteContext)
-  const {notes, setNotes} = context;
+  const {notes, addNote} = context;
+
+  const submitResponse = (e) =>{
+    e.preventDefault();   //Prevents the reloading of the page
+
+    var noteTitle =document.getElementById('newtitle').value
+    let noteContent= document.getElementById('newcontent').value;
+    let noteTag= document.getElementById('newtag').value;
+    addNote(noteTitle, noteContent, noteTag)
+    
+  }
+
   return (
     <>
       <div style={{ height: "71px" }}></div>  {/* This is to leave some area for the fixed navigation bar*/}
@@ -12,17 +24,23 @@ function Home() {
       <div className="container">
         
         <h2>Add Note</h2>
-        <form>
+        <form id="newNote">
         <div className="mb-3">
-          <label htmlFor="userEmail" className="form-label">Email address</label>
-          <input type="email" className="form-control" id="userEmail" aria-describedby="emailHelp"/>
+          <label htmlFor="newtitle" className="form-label">Title</label>
+          <input type="text" className="form-control" id="newtitle"/>
         </div>
         <div className="mb-3">
-          <label htmlFor="loginPassword" className="form-label">Password</label>
-          <input type="password" className="form-control" id="loginPassword"/>
+          <label htmlFor="newcontent" className="form-label">Content</label>
+          <input type="text" className="form-control" id="newcontent"/>
         </div>
-        <button type="submit" className="btn btn-outline-info">Submit</button>
+        <div className="mb-3">
+          <label htmlFor="newtag" className="form-label">Tag</label>
+          <input type="text" className="form-control" id="newtag"/>
+        </div>
+        <button type="submit" className="btn btn-outline-info" onClick={submitResponse}>Submit</button>
       </form>
+
+
 
       <div className = "notes">
         <h2>Notes</h2>
