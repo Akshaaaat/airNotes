@@ -4,7 +4,7 @@ import { ModeContext } from "../context/NoteMode";
 import NoteContext from "../context/NoteContext";
 
 const NoteItem = (props) => {
-  const { note } = props;
+  const { note, useModal } = props;
   const mode = useContext(ModeContext);
 
   const context = useContext(NoteContext);
@@ -20,7 +20,7 @@ const NoteItem = (props) => {
               <span className="material-symbols-outlined icon-delete" onClick={() => { deleteNote(note._id); }}>
                 delete
               </span>
-              <span className="material-symbols-outlined icon-edit">edit</span>
+              <span className="material-symbols-outlined icon-edit" onClick={ ()=>{useModal(note)}}>edit</span>
             </div>
           </div>
           <p className="card-text"> {note.content} </p>
