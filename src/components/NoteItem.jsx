@@ -17,7 +17,7 @@ const NoteItem = (props) => {
           <div className="d-flex justify-content-between">
             <h5 className="card-title">{note.title}</h5>
             <div className="column card-icons d-flex flex-no-wrap">
-              <span className="material-symbols-outlined icon-delete" onClick={() => { deleteNote(note._id); }}>
+              <span className="material-symbols-outlined icon-delete" onClick={() => { deleteNote(note._id); props.showAlert("Note deleted Successfully", 'success', 2500);}}>
                 delete
               </span>
               <span className="material-symbols-outlined icon-edit" onClick={ ()=>{useModal(note)}}>edit</span>

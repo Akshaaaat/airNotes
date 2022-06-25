@@ -1,0 +1,16 @@
+body h5{
+    font-size: 26px;
+    padding: 7px 0px;
+}
+
+.login-form{
+    max-width: 350px;
+    margin: auto;
+}
+
+body form a{
+    text-decoration: none;
+}
+body form a:hover{
+    font-weight: 500;
+}

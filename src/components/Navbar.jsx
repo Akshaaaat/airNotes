@@ -1,11 +1,12 @@
 import React, { useContext} from 'react';
-import {NavLink} from 'react-router-dom';
+import {NavLink, useNavigate} from 'react-router-dom';
 import './CSS/Navbar.css';
 import { ModeContext } from '../context/NoteMode'
 
-export default function Navbar() {
+export default function Navbar(props) {
 
   const mode = useContext(ModeContext);
+  let navigate  = useNavigate();
 
   //When the navigation Link is active, this style will take place
   let activeStyle = {
@@ -13,11 +14,16 @@ export default function Navbar() {
     fontSize:"0.99rem",
   }
 
+  const logOut = () =>{
+    localStorage.removeItem('airnotestoken');
+    navigate('/login')
+    props.showAlert('Logged Out Successfully', 'success', 2000)
+  }
 
 
   return (
     <>
-    <nav className = "navbar fixed-top navbar-expand-lg navbar-dark" style = {{borderBottom:'1px solid rgb(221 219 230 / 30%)', backgroundColor:'#001429', minHeight:'73px'}}>
+    <nav className = "navbar sticky-top navbar-expand-lg navbar-dark" style = {{borderBottom:'1px solid rgb(221 219 230 / 30%)', backgroundColor:'#001429', minHeight:'73px'}}>
     
       <div className="container-fluid">
         <div style={{fontSize: '22px', fontWeight:'500', padding:'4px', color: 'whitesmoke'}} >
@@ -42,12 +48,20 @@ export default function Navbar() {
 
           {/*Making Darkmode toggle Button*/}
           <div className="form-check form-switch mx-3">
-            {/* eslint-disable-next-line*/}
+            {/* eslint-disable-next-line*/}     
             <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" onClick={mode.toggleMode}  style={{cursor:'pointer'}} />
             <label className="form-check-label" htmlFor="flexSwitchCheckDefault" style={{color: 'whitesmoke'}}>
-              Dark Mode
+            <span className="material-symbols-outlined">dark_mode</span>
             </label>
           </div>
+
+          {!localStorage.getItem('airnotestoken') && <div>
+            <NavLink to="/login" className="btn btn-outline-primary btn-sm mx-2" >Login</NavLink>
+            <NavLink to="/signup" className="btn btn-outline-primary btn-sm mx-2">Sign Up</NavLink>
+          </div>}
+          {localStorage.getItem('airnotestoken') && <div style={{width:'120px', display:'flex', justifyContent:'center'}}>
+            <button className='btn btn-outline-primary btn-sm' onClick= {logOut}>LogOut</button>
+          </div>}
 
         </div>
       </div>

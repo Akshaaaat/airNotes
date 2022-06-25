@@ -7,7 +7,7 @@ export default function NoteMode(props){
     const toggleMode = () =>{
         if(state.mode==='light'){
             setState({mode:'dark'});
-            document.body.style.backgroundColor='#2c3034';
+            document.body.style.backgroundColor='#2b2d32';
             document.body.style.color='whitesmoke';
         }
         else{

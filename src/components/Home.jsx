@@ -1,18 +1,30 @@
 import React, { useContext, useEffect} from "react";
 import NoteContext from "../context/NoteContext";
+import { useNavigate } from "react-router-dom";
 import { ModeContext } from "../context/NoteMode";
 import NoteItem from './NoteItem';
 import './CSS/Home.css'
 
-function Home() {
+function Home(props) {
 
   const mode = useContext(ModeContext);
   const context = useContext(NoteContext)
   const {notes, addNote, getNotes, editNote} = context;
+  const navigate = useNavigate();
 
   //Function to call getNotes() which will be fetching all the notes of a given user form the mongoDB database
   useEffect(()=>{
-    getNotes();
+    if(localStorage.getItem('airnotestoken')){
+      getNotes();
+    }
+    else{
+      props.showAlert("Sign In. Redirecting to Login Page...",'danger', 2300)
+      setTimeout(() => {
+        navigate('/login')
+      }, 1500);
+      
+    }
+    
   },[])
 
   //Funciton to submit the response of the addNote
@@ -23,13 +35,21 @@ function Home() {
     let noteContent= document.getElementById('newcontent').value;
     let noteTag= document.getElementById('newtag').value;
     addNote(noteTitle, noteContent, noteTag)    
+
+    if(noteTitle.length<4 || noteContent.length<5)
+    {
+      props.showAlert("Enter a valid note Title and Description. Note has not been added", 'danger', 3500);
+    }
+    else{
+      props.showAlert("Note Added Successfully", 'success', 1500);
+    }
   }
+
 
   var noteToBeEdited;
   //Function to trigger the modal when Edit is pressed
   const useModal = (note) =>{
     document.getElementById("modalTrigger").click();
-    console.log(note)
     noteToBeEdited= note;
   }
   const submitChanges=  (e) =>{
@@ -40,38 +60,43 @@ function Home() {
 
     var note = noteToBeEdited
     editNote(note._id,editTitle,editContent, editTag)
+    props.showAlert("Note Edited Successfully", 'success', 1500);
 
     document.getElementById("modal-cancel").click();
   }
 
+
+  //Creating an object for style of the Input Boxes
+  const inputStyle = (mode.state.mode==='dark'?{color:'whitesmoke', backgroundColor:'#1e2125e3'}:{})
+
   return (
     <>
-      <div style={{ height: "71px" }}></div>  {/* This is to leave some area for the fixed navigation bar*/}
-
-      <div className="container">
+      <div className="container-md">
 
         {/*Section to add a note*/}
-        <h2>Add Note</h2>
-        <form id="newNote">
-          <div className="mb-3">
-            <label htmlFor="newtitle" className="form-label">Title</label>
-            <input type="text" className="form-control" id="newtitle"/>
-          </div>
-          <div className="mb-3">
-            <label htmlFor="newcontent" className="form-label">Content</label>
-            <input type="text" className="form-control" id="newcontent"/>
-          </div>
-          <div className="mb-3">
-            <label htmlFor="newtag" className="form-label">Tag</label>
-            <input type="text" className="form-control" id="newtag"/>
-          </div>
-          <button type="submit" className="btn btn-outline-info" onClick={submitResponse}>Submit</button>
-        </form>
+        <div className="new-note-form">
+          <h2>Add Note</h2>
+          <form id="newNote">
+            <div className="mb-3">
+              <label htmlFor="newtitle" className="form-label">Title</label>
+              <input type="text" className="form-control" id="newtitle" style={inputStyle} required/>
+            </div>
+            <div className="mb-3">
+              <label htmlFor="newcontent" className="form-label">Content</label>
+              <textarea type="text" rows={4} className="form-control" id="newcontent" minLength={4} style={inputStyle} required/>
+            </div>
+            <div className="mb-3">
+              <label htmlFor="newtag" className="form-label">Tag</label>
+              <input type="text" className="form-control" id="newtag" style={inputStyle} />
+            </div>
+            <button type="submit" className="btn btn-outline-info" onClick={submitResponse}>Submit</button>
+          </form>
+        </div>
 
 
         {/*Modal to be displayed when editing a Note*/}
         <button type="button" className="btn btn-primary" id="modalTrigger" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style={{visibility:'hidden'}}>
-          Hidden Modal Button Which we will be abusing to open the Modal
+          Hidden Modal Button Which we will be Clicking to open the Modal
         </button>
         <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered">
@@ -86,15 +111,15 @@ function Home() {
                 <form id="editNote">
                   <div className="mb-3">
                     <label htmlFor="editTitle" className="form-label">Title</label>
-                    <input type="text" className="form-control" id="editTitle"/>
+                    <input type="text" className="form-control" id="editTitle" style={inputStyle} />
                   </div>
                   <div className="mb-3">
                     <label htmlFor="editContent" className="form-label">Content</label>
-                    <textarea type="text" rows="4" className="form-control" id="editContent"/>
+                    <textarea type="text" rows="4" className="form-control" id="editContent" style={inputStyle} minLength={4}/>
                   </div>
                   <div className="mb-3">
                     <label htmlFor="editTag" className="form-label">Tag</label>
-                    <input type="text" className="form-control" id="editTag"/>
+                    <input type="text" className="form-control" id="editTag" style={inputStyle} />
                   </div>
                 </form>
 
@@ -111,11 +136,12 @@ function Home() {
         {/*Section to add display all Notes*/}
         <div className = "notes">
           <h2>Notes</h2>
-          <div className="d-flex flex-wrap justify-content-start">
+          {notes.length===0 && <div className="no-notes-to-display">No Notes to Display</div>}
+          <div className="d-flex flex-wrap justify-content-center justify-content-md-start">
             {
               notes.map((note)=>{
                 return <div key = {note._id}>
-                  <NoteItem note={note} useModal= {useModal}/>
+                  <NoteItem showAlert={props.showAlert} note={note} useModal= {useModal}/>
                 </div>     
               })
             }

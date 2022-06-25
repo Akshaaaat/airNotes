@@ -6,6 +6,7 @@ export const NoteState = (props) => {
   const host = "http://localhost:5000";
   const [notes, setNotes]= useState([])
 
+
   //Funciton to get all the notes from the mongoDB database
   const getNotes= async () =>{
     //API call to  a note
@@ -13,11 +14,12 @@ export const NoteState = (props) => {
       method: 'GET',
       headers:{
         'Content-Type':'Application/json',
-        'auth-token':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjJiMjMyMjg1ODc5NTVjZmMyNDgxZDllIn0sImlhdCI6MTY1NTg0NTc3M30.KN0TFR06xmguGPei203Cs5Ylcjl_C9keLEGf50kCmyI'
+        'auth-token':localStorage.getItem('airnotestoken')
       }});
     const json= await response.json();
     setNotes(json);
   }
+
 
   //Adding a note
   const addNote= async (title, content, tag) =>{
@@ -27,15 +29,15 @@ export const NoteState = (props) => {
       method: 'POST',
       headers:{
         'Content-Type':'Application/json',
-        'auth-token':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjJiMjMyMjg1ODc5NTVjZmMyNDgxZDllIn0sImlhdCI6MTY1NTg0NTc3M30.KN0TFR06xmguGPei203Cs5Ylcjl_C9keLEGf50kCmyI'
+        'auth-token':localStorage.getItem('airnotestoken')
       },
       body: JSON.stringify({ title, content, tag })
     });
+    // eslint-disable-next-line
     const json= response.json();
-    console.log(json)
-
     getNotes();
   }
+
 
   //Delete Note
   const deleteNote= async (id) =>{ 
@@ -45,14 +47,14 @@ export const NoteState = (props) => {
       method: 'DELETE',
       headers:{
         'Content-Type':'Application/json',
-        'auth-token':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjJiMjMyMjg1ODc5NTVjZmMyNDgxZDllIn0sImlhdCI6MTY1NTg0NTc3M30.KN0TFR06xmguGPei203Cs5Ylcjl_C9keLEGf50kCmyI'
+        'auth-token':localStorage.getItem('airnotestoken')
       },
     });
+    // eslint-disable-next-line
     const json= response.json();
-
-    console.log("consider this note deleted"+ id)
     getNotes();
   }
+
 
   //Edit a note
   const editNote= async (id, title, content ,tag) =>{
@@ -62,7 +64,7 @@ export const NoteState = (props) => {
       method: 'PUT',
       headers:{
         'Content-Type':'Application/json',
-        'auth-token':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjJiMjMyMjg1ODc5NTVjZmMyNDgxZDllIn0sImlhdCI6MTY1NTg0NTc3M30.KN0TFR06xmguGPei203Cs5Ylcjl_C9keLEGf50kCmyI'
+        'auth-token':localStorage.getItem('airnotestoken')
       },
       body: JSON.stringify({
         title: title,
@@ -70,6 +72,7 @@ export const NoteState = (props) => {
         tag:tag
       })
     });
+    // eslint-disable-next-line
     const json= response.json();
 
     //Logic to edit in client side
@@ -83,9 +86,9 @@ export const NoteState = (props) => {
         element.tag=tag;
       }
     }
-
     getNotes();
   }
+  
 
   return (
     <NoteContext.Provider value = {{notes, setNotes, getNotes, addNote, deleteNote, editNote}}>
