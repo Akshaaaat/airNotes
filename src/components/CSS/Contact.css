@@ -1,0 +1,22 @@
+.contact-section{
+    background-color: #001429;
+    color: whitesmoke;
+    min-height: 400px;
+}
+
+h3{
+    font-size: x-large;
+    text-align: center;
+}
+
+.contactDetails{
+    min-width: 300px;
+    min-height: 300px;
+}
+
+.contactForm{
+    min-width: 600px;
+    min-height: 500px;
+
+}
+
