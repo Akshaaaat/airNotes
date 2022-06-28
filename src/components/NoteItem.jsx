@@ -10,6 +10,8 @@ const NoteItem = (props) => {
   const context = useContext(NoteContext);
   const { deleteNote } = context;
 
+  const tags  = (note.tag).split(" ")
+
   return (
     <div className="noteItem">
       <div className={`card card-hover ${ mode.state.mode === "light" ? "card-light" : "card-dark"}   shadow p-3 mb-5 rounded `} >
@@ -25,6 +27,14 @@ const NoteItem = (props) => {
           </div>
           <p className="card-text"> {note.content} </p>
         </div>
+      <div className="noteTags d-flex flex-wrap justify-content-center ">
+        {
+          tags.map((tag)=>{
+            return <div className="noteTag" key={tag}>{tag}</div>
+            }
+          )
+        }
+      </div>
       </div>
     </div>
   );
