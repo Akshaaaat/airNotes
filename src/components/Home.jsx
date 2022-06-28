@@ -1,4 +1,4 @@
-import React, { useContext, useEffect} from "react";
+import React, { useContext, useEffect, useState} from "react";
 import NoteContext from "../context/NoteContext";
 import { useNavigate } from "react-router-dom";
 import { ModeContext } from "../context/NoteMode";
@@ -46,20 +46,19 @@ function Home(props) {
   }
 
 
-  var noteToBeEdited;
+  //Section to Edit The Note
+
+  const[noteEdit, setNoteEdit] = useState([])
   //Function to trigger the modal when Edit is pressed
   const useModal = (note) =>{
     document.getElementById("modalTrigger").click();
-    noteToBeEdited= note;
+    setNoteEdit(note);
   }
+
   const submitChanges=  (e) =>{
     e.preventDefault(); //Prevents the reloading of the page
-    var editTitle= document.getElementById('editTitle').value
-    let editContent= document.getElementById('editContent').value;
-    let editTag= document.getElementById('editTag').value;
-
-    var note = noteToBeEdited
-    editNote(note._id,editTitle,editContent, editTag)
+    
+    editNote(noteEdit._id,noteEdit.title,noteEdit.content, noteEdit.tag)
     props.showAlert("Note Edited Successfully", 'success', 1500);
 
     document.getElementById("modal-cancel").click();
@@ -111,15 +110,15 @@ function Home(props) {
                 <form id="editNote">
                   <div className="mb-3">
                     <label htmlFor="editTitle" className="form-label">Title</label>
-                    <input type="text" className="form-control" id="editTitle" style={inputStyle} />
+                    <input type="text" className="form-control" value={noteEdit.title} style={inputStyle} onChange={ (e) => setNoteEdit({...noteEdit, title:e.target.value})} />
                   </div>
                   <div className="mb-3">
                     <label htmlFor="editContent" className="form-label">Content</label>
-                    <textarea type="text" rows="4" className="form-control" id="editContent" style={inputStyle} minLength={4}/>
+                    <textarea type="text" rows="4" className="form-control" value={noteEdit.content} onChange={ (e) => setNoteEdit({...noteEdit, content:e.target.value})} style={inputStyle} minLength={4}/>
                   </div>
                   <div className="mb-3">
                     <label htmlFor="editTag" className="form-label">Tag</label>
-                    <input type="text" className="form-control" id="editTag" style={inputStyle} />
+                    <input type="text" className="form-control" value={noteEdit.tag} onChange={ (e) => setNoteEdit({...noteEdit, tag:e.target.value})} style={inputStyle} />
                   </div>
                 </form>
 
